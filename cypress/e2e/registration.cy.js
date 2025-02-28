@@ -37,3 +37,37 @@ describe('Registration tests', () => {
     cy.url().should('eq', 'http://localhost:8080/thank-you?') 
   })
 })
+
+describe('Registration tests', () => {
+  beforeEach(() => {
+    cy.visit('http://localhost:8080/');
+  });
+
+  it('should show error for invalid full name', () => {
+    cy.get('[data-test-id="fullname"]').clear().type("");
+    cy.get('[data-test-id="submit"]').click();
+    cy.get('[data-test-id="fullname-error"]').should('be.visible');
+  });
+
+  it('should show error for invalid email', () => {
+    // Enter an invalid email value
+    cy.get('[data-test-id="email"]').clear().type('');
+    cy.get('[data-test-id="submit"]').click();
+    cy.get('[data-test-id="email-error"]').should('be.visible');
+  });
+
+  it('should show error for invalid password', () => {
+    // Enter a password that does not meet the validation criteria
+    cy.get('[data-test-id="password"]').clear().type('123');
+    cy.get('[data-test-id="submit"]').click();
+    cy.get('[data-test-id="password-error"]').should('be.visible');
+  });
+
+  it('should show error for mismatched password confirmation', () => {
+    // Enter a valid password and a non-matching confirmation
+    cy.get('[data-test-id="password"]').clear().type('ValidPass123!');
+    cy.get('[data-test-id="confirm-password"]').clear().type('DifferentPass');
+    cy.get('[data-test-id="submit"]').click();
+    cy.get('[data-test-id="confirm-password-error"]').should('be.visible');
+  });
+});
